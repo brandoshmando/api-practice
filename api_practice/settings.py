@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'IPython',
     'coverage',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
