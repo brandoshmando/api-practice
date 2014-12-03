@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from django.contrib.auth.models import User
+from snippets.serializers import SnippetSerializer, UserSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import mixins, generics
@@ -39,3 +40,11 @@ class SnippetDetail(mixins.RetrieveModelMixin,
 
   def delete(self, request, *args, **kwargs):
     return self.destroy(request, *args, **kwargs)
+
+class UserList(generics.ListAPIView):
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+class UserDetail(generics.RetrieveAPIView):
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
