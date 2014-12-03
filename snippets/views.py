@@ -5,7 +5,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework import Response
+from rest_framework.response import Response
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 
@@ -16,7 +16,6 @@ def snippet_list(request):
     serializer = SnippetSerializer(snippets, many=True)
     return Response(serializer.data)
   elif request.method == 'POST':
-    data = JSONParser().parse(reqeust)
     serializer = SnippetSerializer(data=data)
 
     if serializer.is_valid():
@@ -42,11 +41,11 @@ def snippet_detail(request, pk):
     serializer = SnippetSerializer(snippet, data=request.data)
     if serializer.is_valid():
       serializer.save()
-      return JSONResponse(serializer.data)
-    return JSONResponse(serialize.errors, status=400)
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
   elif request.method == 'DELETE':
     snippet.delete()
-    return HttpResponse(status=204)
+    return Response(status=HTTP_204_NO_CONTENT)
 
 
