@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class SnippetSerializer(serializers.ModelSerializer):
   class Meta:
     model = Snippet
-    fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'pk')
+    fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'pk', 'owner')
 
   pk = serializers.IntegerField(read_only=True)
   title = serializers.CharField(required=False,
@@ -18,6 +18,7 @@ class SnippetSerializer(serializers.ModelSerializer):
 
   style = serializers.ChoiceField(choices=STYLE_CHOICES,
                                   default='python')
+  owner = serializers.ReadOnlyField(source='owner.username')
 
   def create(self, validated_attrs):
     """
@@ -39,7 +40,7 @@ class SnippetSerializer(serializers.ModelSerializer):
     return instance
 
 class UserSerializer(serializers.ModelSerializer):
-  snippets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+  snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
 
   class Meta:
     model = User
