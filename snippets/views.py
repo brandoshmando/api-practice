@@ -6,6 +6,17 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import mixins, generics
 from rest_framework import permissions
+from snippets.permissions import IsOwnerOrReadOnly
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
+@api_view(('GET',))
+def api_root(request, format=None):
+  return Response({
+    'users': reverse('user-list', request=request, format=format),
+    'snippets':reverse('snippet-list', request=request, format=format)
+    })
 
 class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
@@ -36,7 +47,7 @@ class SnippetDetail(mixins.RetrieveModelMixin,
   """
   queryset = Snippet.objects.all()
   serializer_class = SnippetSerializer
-  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
   def get(self, request, *args, **kwargs):
     return self.retrieve(request, *args, **kwargs)
 
