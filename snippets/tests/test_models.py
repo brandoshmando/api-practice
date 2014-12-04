@@ -8,3 +8,4 @@ class SnippetTest(TestCase):
 
   def test_snippet_creation(self):
     self.assertTrue(isinstance(self.snippet, Snippet))
+    self.assertEqual(self.snippet.__unicode__(), self.snippet.title)

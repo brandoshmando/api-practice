@@ -25,6 +25,9 @@ class Snippet(models.Model):
   class Meta:
     ordering = ('created',)
 
+  def __unicode__(self):
+    return self.title
+
   def save(self, *args, **kwargs):
     """
     Use the 'pygments' library to create a highlighted section of the code snippet
